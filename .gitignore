@@ -102,3 +102,11 @@ dist
 
 # TernJS port file
 .tern-port
+
+# VS Code workspaces
+*.code-workspace
+
+# Cache
+backend/__pycache__
+backend/.pytest_cache
+backend/cars-trade-env
