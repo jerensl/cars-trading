@@ -1,9 +1,18 @@
 from fastapi import FastAPI
-from routers import cars
+from starlette.middleware.cors import CORSMiddleware
+from routes import brand
 
 app = FastAPI()
 
-app.include_router(cars.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(brand.router)
 
 @app.get("/")
 async def read_main():

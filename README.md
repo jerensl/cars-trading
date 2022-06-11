@@ -27,7 +27,7 @@
 
 Active A virtual environment for fish shell
 ```bash
-source /cars-trade-env/bin/activate.fish
+source cars-trade-env/bin/activate.fish
 ```
 
 Running a Server
