@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, status 
+from fastapi import APIRouter, Body, status, Query
 from fastapi.encoders import jsonable_encoder
 
 from models.brands import (
@@ -31,22 +31,38 @@ async def add_car_brand(brand: BrandsSchema = Body(...)):
 async def list_of_car_brand():
     brands = await retrieve_brands()
     if brands:
-        return ResponseModel(brands, "brands data retrieved successfully")
+        return ResponseModel(brands, "Brands data retrieved successfully")
     return ResponseModel(brands, "Empty list returned")
 
 @router.get("/{brand}")
 async def search_car_brand():
-    return {"Brand": ["BMW", "Daihatsu", "Honda", "Mitsubishi"]}
+    brand = await retrieve_brand(id)
+    if brand:
+        return ResponseModel(brand, "Brand data retrieved successfully")
+    return ErrorResponseModel("An error occurred.", 404, "Brand doesn't exist.")
 
-@router.get("/detail/{brand}")
-async def get_car_brand_detail():
-    return {"Bramd": "BMW", "Description": "......",}
 
+@router.put("/{id}")
+async def update_car_brand(id: str, req: UpdateBrandsModel = Body(...)):
+    req = {k: v for k, v in req.dict().items() if v is not None}
+    updated_brand = await update_brand(id, req)
+    if updated_brand:
+        return ResponseModel(
+            "Brand with ID: {0}, have been updated".format(id),
+            "Brand update successfully"
+        )
+    return ErrorResponseModel(
+        "Something wrong",
+        404,
+        "Error when update the brand"
+    )
 
-@router.patch("/")
-async def update_car_brand():
-    return {"Brand": ["BMW", "Daihatsu", "Honda", "Mitsubishi"]}
-
-@router.delete("/")
+@router.delete("/{id}")
 async def delete_car_brand():
-    return {"Brand": ["BMW", "Daihatsu", "Honda", "Mitsubishi"]}
+    deleted_brand = await delete_brand(id)
+    if deleted_brand:
+        return ResponseModel(
+            "Brand with ID: {0} deleted".format(id),
+            "Deleted brand successfully"
+        )
+    return ErrorResponseModel("Something wrong", 404, "Brand with id {0} doens't exit".format(id))
