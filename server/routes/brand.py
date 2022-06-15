@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Body, status, Query
+from fastapi import APIRouter, Body, status
 from fastapi.encoders import jsonable_encoder
+from utils.decode import create_aliased_response
 
 from models.brands import (
     retrieve_brand, 
@@ -25,7 +26,7 @@ router = APIRouter(
 async def add_car_brand(brand: BrandsSchema = Body(...)):
     brand = jsonable_encoder(brand)
     new_brand = await add_brand(brand)
-    return ResponseModel(new_brand, "Student added successfully.")
+    return ResponseModel(new_brand, "Brands data retrieved successfully")
 
 @router.get("/")
 async def list_of_car_brand():
