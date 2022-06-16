@@ -1,8 +1,22 @@
 import * as React from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { Formik, Form, Field } from 'formik'
+
+interface MyFormValues {
+    brandName: string
+    description: string
+    brandStatus: string
+    photo: string
+}
 
 export function Brand_Modal() {
     let [isOpen, setIsOpen] = React.useState(false)
+    const initialValues: MyFormValues = {
+        brandName: '',
+        description: '',
+        brandStatus: '',
+        photo: '',
+    }
 
     function closeModal() {
         setIsOpen(false)
@@ -57,24 +71,70 @@ export function Brand_Modal() {
                                             Setup your car brand
                                         </p>
                                     </div>
-                                    <div className="mt-2">
-                                        <p className="text-sm text-gray-500">
-                                            Your payment has been successfully
-                                            submitted. We’ve sent you an email
-                                            with all of the details of your
-                                            order.
-                                        </p>
-                                    </div>
-
-                                    <div className="mt-4">
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={closeModal}
-                                        >
-                                            Got it, thanks!
-                                        </button>
-                                    </div>
+                                    <Formik
+                                        initialValues={initialValues}
+                                        onSubmit={(values, actions) => {
+                                            console.log({ values, actions })
+                                            alert(
+                                                JSON.stringify(values, null, 2)
+                                            )
+                                            actions.setSubmitting(false)
+                                        }}
+                                    >
+                                        <Form className="flex flex-col">
+                                            <label className="mt-5">
+                                                Upload File
+                                            </label>
+                                            <input
+                                                type="file"
+                                                name="photo"
+                                                accept="image/*"
+                                            />
+                                            <label
+                                                className="mt-5"
+                                                htmlFor="brandName"
+                                            >
+                                                Brand name
+                                            </label>
+                                            <Field
+                                                className="w-44 py-2"
+                                                id="brandName"
+                                                name="brandName"
+                                                placeholder="Brand Name"
+                                            />
+                                            <label
+                                                className="mt-5"
+                                                htmlFor="description"
+                                            >
+                                                Brand name
+                                            </label>
+                                            <Field
+                                                className="w-44 py-2"
+                                                id="description"
+                                                name="description"
+                                                placeholder="Description"
+                                            />
+                                            <label
+                                                className="mt-5"
+                                                htmlFor="brandStatus"
+                                            >
+                                                Brand Status
+                                            </label>
+                                            <Field
+                                                className="w-44 py-2"
+                                                id="brandStatus"
+                                                name="brandStatus"
+                                                placeholder="Brand Status"
+                                            />
+                                            <button
+                                                type="submit"
+                                                className="mt-10 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                onClick={closeModal}
+                                            >
+                                                Submit
+                                            </button>
+                                        </Form>
+                                    </Formik>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
