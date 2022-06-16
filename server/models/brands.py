@@ -104,3 +104,4 @@ async def delete_brand(id: str):
     if brand:
         await brands_collection.delete_one({"_id": ObjectId(id)})
         return True
+        
