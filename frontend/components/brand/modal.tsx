@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, FormikValues } from 'formik'
 
 interface MyFormValues {
     brandName: string
@@ -24,6 +24,12 @@ export function Brand_Modal() {
 
     function openModal() {
         setIsOpen(true)
+    }
+
+    const handleSubmit = (values: FormikValues, actions: any) => {
+        console.log({ values, actions })
+        alert(JSON.stringify(values, null, 2))
+        actions.setSubmitting(false)
     }
 
     return (
@@ -73,13 +79,7 @@ export function Brand_Modal() {
                                     </div>
                                     <Formik
                                         initialValues={initialValues}
-                                        onSubmit={(values, actions) => {
-                                            console.log({ values, actions })
-                                            alert(
-                                                JSON.stringify(values, null, 2)
-                                            )
-                                            actions.setSubmitting(false)
-                                        }}
+                                        onSubmit={handleSubmit}
                                     >
                                         <Form className="flex flex-col">
                                             <label className="mt-5">
