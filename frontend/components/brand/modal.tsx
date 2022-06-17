@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Formik, Form, Field, FormikValues } from 'formik'
+import { Formik, Form, Field, FormikValues, FormikHelpers } from 'formik'
 
 interface MyFormValues {
     brandName: string
@@ -26,7 +26,10 @@ export function Brand_Modal() {
         setIsOpen(true)
     }
 
-    const handleSubmit = (values: FormikValues, actions: any) => {
+    const handleSubmit = (
+        values: MyFormValues,
+        actions: FormikHelpers<MyFormValues>
+    ) => {
         console.log({ values, actions })
         alert(JSON.stringify(values, null, 2))
         actions.setSubmitting(false)
@@ -36,7 +39,7 @@ export function Brand_Modal() {
         <>
             <button
                 onClick={openModal}
-                className="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
+                className="border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
             >
                 Add Brand
             </button>
@@ -128,7 +131,7 @@ export function Brand_Modal() {
                                             />
                                             <button
                                                 type="submit"
-                                                className="mt-10 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                className="mt-10 inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                                                 onClick={closeModal}
                                             >
                                                 Submit
