@@ -74,7 +74,7 @@ class Status(enum.Enum):
 
 class BrandsSchema(BaseModel):
     name: str = Field(min_length=3, max_length=25)
-    logo: str = Field(min_length=5, max_length=100, title="Logo url to an image")
+    logo: str = ""
     description: Union[str, None] = Field(
         default=None, title="The description of the brand", max_length=300
     )

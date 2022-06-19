@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Formik, Form, Field, FormikValues, FormikHelpers } from 'formik'
+import { Formik, Form, Field, FormikHelpers } from 'formik'
 
 interface MyFormValues {
     brandName: string
@@ -26,14 +26,40 @@ export function Brand_Modal() {
         setIsOpen(true)
     }
 
-    const handleSubmit = (
+    const handleSubmit = async (
         values: MyFormValues,
         actions: FormikHelpers<MyFormValues>
     ) => {
-        console.log({ values, actions })
-        alert(JSON.stringify(values, null, 2))
+        const data = {
+            name: values.brandName,
+            description: values.description,
+        }
+        const resp = await fetch(
+            `${process.env.NEXT_PUBLIC_RESTFULL_API}/brand`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }
+        )
 
+        const respData = await resp.json()
+        const formUploadImage = new FormData()
+
+        formUploadImage.append('brand_id', respData.data[0].id)
+        formUploadImage.append('image', values.photo)
+
+        await fetch(
+            `${process.env.NEXT_PUBLIC_RESTFULL_API}/brand/uploadimage`,
+            {
+                method: 'POST',
+                body: formUploadImage,
+            }
+        )
         actions.setSubmitting(false)
+        setIsOpen(false)
     }
 
     return (
@@ -85,59 +111,84 @@ export function Brand_Modal() {
                                         initialValues={initialValues}
                                         onSubmit={handleSubmit}
                                     >
-                                        <Form className="flex flex-col">
-                                            <label className="mt-5">
-                                                Upload File
-                                            </label>
-                                            <input
-                                                type="file"
-                                                name="photo"
-                                                accept="image/*"
-                                            />
-                                            <label
-                                                className="mt-5"
-                                                htmlFor="brandName"
-                                            >
-                                                Brand name
-                                            </label>
-                                            <Field
-                                                className="w-44 py-2"
-                                                id="brandName"
-                                                name="brandName"
-                                                placeholder="Brand Name"
-                                            />
-                                            <label
-                                                className="mt-5"
-                                                htmlFor="description"
-                                            >
-                                                Brand name
-                                            </label>
-                                            <Field
-                                                className="w-44 py-2"
-                                                id="description"
-                                                name="description"
-                                                placeholder="Description"
-                                            />
-                                            <label
-                                                className="mt-5"
-                                                htmlFor="brandStatus"
-                                            >
-                                                Brand Status
-                                            </label>
-                                            <Field
-                                                className="w-44 py-2"
-                                                id="brandStatus"
-                                                name="brandStatus"
-                                                placeholder="Brand Status"
-                                            />
-                                            <button
-                                                type="submit"
-                                                className="mt-10 inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                                onClick={closeModal}
-                                            >
-                                                Submit
-                                            </button>
-                                        </Form>
+                                        {(formik) => {
+                                            return (
+                                                <Form className="flex flex-col">
+                                                    <label className="mt-5">
+                                                        Upload File
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        name="photo"
+                                                        accept="image/*"
+                                                        onChange={(
+                                                            e: React.ChangeEvent<HTMLInputElement>
+                                                        ) => {
+                                                            if (
+                                                                !e.target
+                                                                    .files ||
+                                                                e.target.files
+                                                                    .length ===
+                                                                    0
+                                                            ) {
+                                                                return
+                                                            }
+
+                                                            const image =
+                                                                e.target
+                                                                    .files[0]
+
+                                                            formik.setFieldValue(
+                                                                'photo',
+                                                                image
+                                                            )
+                                                        }}
+                                                    />
+                                                    <label
+                                                        className="mt-5"
+                                                        htmlFor="brandName"
+                                                    >
+                                                        Brand name
+                                                    </label>
+                                                    <Field
+                                                        className="w-44 py-2"
+                                                        id="brandName"
+                                                        name="brandName"
+                                                        placeholder="Brand Name"
+                                                    />
+                                                    <label
+                                                        className="mt-5"
+                                                        htmlFor="description"
+                                                    >
+                                                        Description
+                                                    </label>
+                                                    <Field
+                                                        className="w-44 py-2"
+                                                        id="description"
+                                                        name="description"
+                                                        placeholder="Description"
+                                                    />
+                                                    {/* <label
+                                                    className="mt-5"
+                                                    htmlFor="brandStatus"
+                                                >
+                                                    Brand Status
+                                                </label>
+                                                <Field
+                                                    className="w-44 py-2"
+                                                    id="brandStatus"
+                                                    name="brandStatus"
+                                                    placeholder="Brand Status"
+                                                /> */}
+                                                    <button
+                                                        type="submit"
+                                                        className="mt-10 inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                                                    >
+                                                        Submit
+                                                    </button>
+                                                </Form>
+                                            )
+                                        }}
                                     </Formik>
                                 </Dialog.Panel>
                             </Transition.Child>
