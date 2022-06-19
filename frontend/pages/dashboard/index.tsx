@@ -1,11 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { dehydrate } from 'react-query'
-import { Brands } from '../components/brand/brand_list'
-import { Navbar } from '../components/navbar'
-import { getAllBrand, queryClient } from '../context/api'
+import { Brands } from '../../components/brand/brand_list'
 
-const Home: NextPage = () => {
+const Dashboard: NextPage = () => {
     return (
         <div>
             <Head>
@@ -16,8 +13,10 @@ const Home: NextPage = () => {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+
+            <Brands />
         </div>
     )
 }
 
-export default Home
+export default Dashboard

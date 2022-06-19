@@ -12,12 +12,14 @@ from models.brands import (
     search_brand,
     delete_brand,
     update_brand
+    
 )
 
 from models.schema import (
     BrandsSchema,
     ErrorResponseModel,
     ResponseModel,
+    ResponseSingleModel,
     UpdateBrandsModel
 )
 
@@ -59,7 +61,7 @@ async def get_images(logo: str):
 async def list_of_car_brand():
     brands = await retrieve_brands()
     if brands:
-        return ResponseModel(brands, "Brands data retrieved successfully")
+        return ResponseSingleModel(brands, "Brands data retrieved successfully")
     return ResponseModel(brands, "Empty list returned")
 
 @router.get("/{brand}")

@@ -3,20 +3,57 @@ import * as Yup from 'yup'
 import { Formik, Form, Field, FormikHelpers } from 'formik'
 import { Grid } from '../grid'
 import { Brand_Modal } from './modal'
+import { useMutation, useQuery } from 'react-query'
+import { getAllBrand, searchBrandByName, queryClient } from '../../context/api'
+import { Card } from './card'
+import { ListOfBrands } from './item'
 
 interface MyFormValues {
     query: string
 }
 
 export const Brands = (): React.ReactElement => {
+    const { data } = useQuery('brand', getAllBrand, {
+        retry: false,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+    })
+
+    const mutation = useMutation(
+        (brand_name: string) => searchBrandByName(brand_name),
+        {
+            // When mutate is called:
+            onMutate: async (newBrand) => {
+                // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+                await queryClient.cancelQueries('brand')
+
+                // Snapshot the previous value
+                const previousBrand = queryClient.getQueryData('brand')
+
+                // Optimistically update to the new value
+                queryClient.setQueryData('brand', newBrand)
+
+                // Return a context object with the snapshotted value
+                return { previousBrand, newBrand }
+            },
+            // If the mutation fails, use the context returned from onMutate to roll back
+            onError: (err, newBrand, context) => {
+                queryClient.setQueryData('brand', context?.previousBrand)
+            },
+            // Always refetch after error or success:
+            onSettled: () => {
+                queryClient.invalidateQueries('brand')
+            },
+        }
+    )
+
     const initialValues: MyFormValues = { query: '' }
 
     const handleSubmit = (
         values: MyFormValues,
         actions: FormikHelpers<MyFormValues>
     ) => {
-        console.log({ values, actions })
-        alert(JSON.stringify(values, null, 2))
+        mutation.mutate(values.query)
         actions.setSubmitting(false)
     }
 
@@ -26,6 +63,10 @@ export const Brands = (): React.ReactElement => {
             .max(50, 'Too Long!')
             .required('Required'),
     })
+
+    const allDataQuery = mutation.data?.data.length
+        ? mutation.data?.data
+        : data?.data
 
     return (
         <Grid className="pt-20">
@@ -52,6 +93,13 @@ export const Brands = (): React.ReactElement => {
                     )}
                 </Formik>
                 <Brand_Modal />
+            </div>
+            <div className="col-span-full">
+                <ListOfBrands brand={allDataQuery} />
+                {/* {mutation.data?.data.length
+                    ? mutation.data?.data.map(item)
+                    : null}
+                {!mutation.data?.data.length ? data?.data.map(item) : null} */}
             </div>
         </Grid>
     )
