@@ -1,13 +1,12 @@
 import enum
+import os
 from fastapi import HTTPException
 import motor.motor_asyncio
 from typing import List, Optional, Union
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-MONGO_DETAILS = "mongodb://root:secret@localhost:27017"
-
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGO_URL"])
 
 db_brand = client.brands
 db_car = client.cars
@@ -81,7 +80,7 @@ class BrandsSchema(BaseModel):
     )
     update_at: datetime = datetime.utcnow()
     status: Status = "Active"
-    cars: List[CarsSchema] = Field(...)
+    cars: List[CarsSchema] = []
 
     class Config:
         schema_extra = {
@@ -89,7 +88,6 @@ class BrandsSchema(BaseModel):
                 "name": "BMW",
                 "logo": "https://imgur.com/gallery/xxxx",
                 "description": "The acronym BMW stands for Bayerische Motoren Werke GmbH, which roughly translates to the Bavarian Engine Works Company. The name harks back to the company's origin in the German state of Bavaria. It also indicates BMW's original product range: engines for various applications",
-                "cars": []
             }
         }
 

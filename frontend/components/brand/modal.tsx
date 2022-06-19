@@ -32,6 +32,7 @@ export function Brand_Modal() {
     ) => {
         console.log({ values, actions })
         alert(JSON.stringify(values, null, 2))
+
         actions.setSubmitting(false)
     }
 

@@ -1,5 +1,5 @@
-from models.schema import cars_helper, cars_collection
-from models.brands import brands_collection ,insert_new_car_brand
+from .schema import cars_helper, cars_collection
+from .brands import brands_collection ,insert_new_car_brand
 from bson.objectid import ObjectId
 
 

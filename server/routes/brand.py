@@ -1,6 +1,7 @@
 import os
-from fastapi import APIRouter, Body, status, File, UploadFile
+from fastapi import APIRouter, Body, status, File, UploadFile, Form
 from fastapi.encoders import jsonable_encoder
+from fastapi.responses import FileResponse
 from utils.decode import create_aliased_response
 
 from models.brands import (
@@ -28,26 +29,31 @@ router = APIRouter(
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def add_car_brand(brand: BrandsSchema = Body(...)):
     brand = jsonable_encoder(brand)
+
     new_brand = await add_brand(brand)
     if new_brand == None:
         return ErrorResponseModel(403, "Brand already exist.")
     return ResponseModel(new_brand, "Brands data retrieved successfully")
 
-@router.post("/uploadimage/{id}", status_code=status.HTTP_201_CREATED)
-async def upload_image(id: str, file: UploadFile = File(...)):
-    
+@router.post("/uploadimage")
+async def upload_image(brand_id: str = Form(), image: UploadFile = File(...)):
     allowedFormat = {"image/jpeg", "image/png", "image/gif", "image/tiff", "image/bmp", "video/webm"}
-    if file.content_type in allowedFormat:
-        contents = await file.read()
+    if image.content_type in allowedFormat:
+        contents = await image.read()
 
-        with open(f"images/{file.filename}", "wb") as f:
+        with open(f"images/{image.filename}", "wb") as f:
             f.write(contents)
-        
-        await update_brand_image(id, "https://localhost:8000/images/"+file.filename)
+            await update_brand_image(brand_id, f"images/{image.filename}")    
+        return ResponseModel({}, "Brands image uploaded successfully")
+    return ErrorResponseModel(403, "File not allowed.")
 
-        return ResponseModel({}, "Images {0} Saved".format(file.filename))
-
-    return ErrorResponseModel(404, "File not allowed.")
+@router.get("/images/{logo}")
+async def get_images(logo: str):
+    path = f"images/{logo}"
+    isImageExist = os.path.exists(f"images/{logo}")
+    if isImageExist:
+        return FileResponse(path)
+    return ErrorResponseModel(404, "Image not exist.")
 
 @router.get("/")
 async def list_of_car_brand():

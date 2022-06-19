@@ -9,23 +9,25 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data:/data/db
-  frontend-car-trade:
-    build:
-      context: .
-      dockerfile: docker/frontend/development/Dockerfile
-    restart: always
-    image: frontend-car-trade
-    ports:
-      - '3000:3000'
-  server:
-    depends_on:
-      - mongodb
-    build:
-      context: .
-      dockerfile: docker/server/Dockerfile
-    volumes:
-      - .:/server
-    ports:
-      - 8008:8000
+  # frontend-car-trade:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/frontend/development/Dockerfile
+  #   restart: always
+  #   image: frontend-car-trade
+  #   ports:
+  #     - '3000:3000'
+  # server:
+  #   depends_on:
+  #     - mongodb
+  #   build:
+  #     context: .
+  #     dockerfile: docker/server/Dockerfile
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/server
+  #   ports:
+  #     - 8008:8000
 volumes:
   mongodb_data:

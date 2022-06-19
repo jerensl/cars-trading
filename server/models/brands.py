@@ -1,5 +1,5 @@
 import string
-from models.schema import brands_helper, brands_collection, cars_helper
+from .schema import brands_helper, brands_collection, cars_helper
 from utils.decode import create_aliased_response
 from bson.objectid import ObjectId
 import re
