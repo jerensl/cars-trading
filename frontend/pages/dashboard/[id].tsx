@@ -8,6 +8,8 @@ import {
 import { getAllBrand, getBrandByID } from '../../context/api'
 import { Grid } from '../../components/grid'
 import Image, { ImageLoader } from 'next/image'
+import { Brand_Modal } from '../../components/brand/modal'
+import { Updare_Modal } from '../../components/brand/update'
 
 const blobStorageIoImageLoader: ImageLoader = ({ src }) => {
     return `http://localhost:8000/brand/${src}`
@@ -43,7 +45,7 @@ export default function Brands({
     brand,
 }: InferGetStaticPropsType<typeof getStaticProps>): React.ReactElement {
     return (
-        <Grid className="pt-20 gap-10">
+        <Grid className="pt-20 gap-6">
             <div className="col-span-full">
                 <h1 className="text-2xl font-medium">Brand Logo</h1>
 
@@ -79,6 +81,9 @@ export default function Brands({
                     <h4 className="text-xl font-medium">
                         {brand.data[0].status}
                     </h4>
+                </div>
+                <div>
+                    <Updare_Modal brand_id={brand.data[0].id} />
                 </div>
             </div>
         </Grid>

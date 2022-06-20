@@ -5,7 +5,6 @@ import { Grid } from '../grid'
 import { Brand_Modal } from './modal'
 import { useMutation, useQuery } from 'react-query'
 import { getAllBrand, searchBrandByName, queryClient } from '../../context/api'
-import { Card } from './card'
 import { ListOfBrands } from './item'
 import clsx from 'clsx'
 
