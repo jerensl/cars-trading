@@ -100,10 +100,6 @@ export const Brands = (): React.ReactElement => {
             </div>
             <div className="col-span-full">
                 <ListOfBrands brand={allDataQuery} />
-                {/* {mutation.data?.data.length
-                    ? mutation.data?.data.map(item)
-                    : null}
-                {!mutation.data?.data.length ? data?.data.map(item) : null} */}
             </div>
         </Grid>
     )

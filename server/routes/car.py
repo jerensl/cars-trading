@@ -4,7 +4,9 @@ from utils.decode import create_aliased_response
 
 from models.cars import (
     add_car,
-    retrieve_cars
+    retrieve_cars,
+    delete_car,
+    update_car
 )
 
 from models.schema import (
@@ -29,7 +31,31 @@ async def add_new_car(id: str, car: CarsSchema = Body(...)):
 
 @carRouter.get("/")
 async def list_of_car():
-    brands = await retrieve_cars()
-    if brands:
-        return ResponseSingleModel(brands, "Brands data retrieved successfully")
-    return ResponseModel(brands, "Empty list returned")
+    cars = await retrieve_cars()
+    if cars:
+        return ResponseSingleModel(cars, "Car data retrieved successfully")
+    return ResponseModel(cars, "Empty list returned")
+
+@carRouter.delete("/{id}")
+async def delete_car_brand(id: str):
+    deleted_car = await delete_car(id)
+    if deleted_car:
+        return ResponseModel(
+            "Car with ID: {0} deleted".format(id),
+            "Deleted car successfully"
+        )
+    return ErrorResponseModel(404, "Car with id {0} doens't exit".format(id))
+
+@carRouter.put("/{id}")
+async def update_car_brand(id: str, req: UpdateCarsModel = Body(...)):
+    req = {k: v for k, v in req.dict().items() if v is not None}
+    updated_car = await update_car(id, req)
+    if updated_car:
+        return ResponseModel(
+            "Car with ID: {0}, have been updated".format(id),
+            "Car update successfully"
+        )
+    return ErrorResponseModel(
+        "Something wrong",
+        404,
+        "Error when update the car")

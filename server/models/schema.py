@@ -57,7 +57,6 @@ class UpdateCarsModel(BaseModel):
     model: Optional[str]
     images: Optional[str]
     description: Optional[str]
-    price: Optional[float]
 
     class Config:
         schema_extra = {

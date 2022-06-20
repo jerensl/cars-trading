@@ -81,7 +81,7 @@ const BodyTable = ({
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <LinkURL href={`/dashboard/${id}`}>
                     <a className="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline">
-                        Edit
+                        View Detail
                     </a>
                 </LinkURL>
             </td>
