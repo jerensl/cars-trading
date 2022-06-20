@@ -11,9 +11,9 @@ COPY /server/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # 
-COPY /server /code/app
+COPY /server /code
 
 EXPOSE 8000
 
 # 
-CMD ["python3", "./main.py"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

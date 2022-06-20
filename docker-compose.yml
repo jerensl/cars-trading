@@ -17,17 +17,17 @@ services:
   #   image: frontend-car-trade
   #   ports:
   #     - '3000:3000'
-  # server:
+  # server-car-trade:
   #   depends_on:
   #     - mongodb
   #   build:
   #     context: .
   #     dockerfile: docker/server/Dockerfile
-  #   env_file:
-  #     - .env
+  #   environment:
+  #     - MONGO_URL=mongodb://root:secret@mongodb:27017
   #   volumes:
   #     - .:/server
   #   ports:
-  #     - 8008:8000
+  #     - 8000:8000
 volumes:
   mongodb_data:
