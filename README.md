@@ -11,23 +11,21 @@ git clone https://github.com/jerensl/cars-trading.git
 Running docker-compose for serve mongodb database
 ```
 docker-compose up
-
 ```
 
-Open two terminal, and cd to each frontend and server directory.
+Open two terminal, and cd to each frontend and server directory.    
 For frontend
 ```
 yarn dev
 ```
-
+        
 For Backend
 ```
 python3 -m uvicorn main:app --reload
 ```
 
 Then, open the browser with address http://localhost:5000
-Go to the Dashboard
-Test the application 
+Go to the Dashboard for Testing the application 
 
 ### Data Models
 1. Brand
