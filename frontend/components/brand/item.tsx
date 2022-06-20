@@ -37,6 +37,15 @@ const BodyTable = ({
     update_at,
     status,
 }: Brand) => {
+    const handleDeleteBrand = async () => {
+        await fetch(`${process.env.NEXT_PUBLIC_RESTFULL_API}/brand/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => res.json())
+    }
+
     return (
         <tr key={id}>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -84,6 +93,12 @@ const BodyTable = ({
                         View Detail
                     </a>
                 </LinkURL>
+                <button
+                    onClick={handleDeleteBrand}
+                    className="border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
+                >
+                    Delete
+                </button>
             </td>
         </tr>
     )

@@ -94,7 +94,7 @@ async def update_car_brand(id: str, req: UpdateBrandsModel = Body(...)):
     )
 
 @router.delete("/{id}")
-async def delete_car_brand():
+async def delete_car_brand(id: str):
     deleted_brand = await delete_brand(id)
     if deleted_brand:
         return ResponseModel(
