@@ -31,8 +31,8 @@ async def add_brand(brand_data: dict) -> dict:
 
 
 # Retrieve a brand with a matching name
-async def retrieve_brand(name: str) -> dict:
-    brand = await brands_collection.find_one({"name": name})
+async def retrieve_brand(id: str) -> dict:
+    brand = await brands_collection.find_one({"_id": ObjectId(id)})
     if brand == None:
         return
     newBrand = brands_helper(brand)

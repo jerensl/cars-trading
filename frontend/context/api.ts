@@ -32,3 +32,11 @@ export const searchBrandByName = async (brand_name: string): Promise<Brands> =>
             'Content-Type': 'application/json',
         },
     }).then((res) => res.json())
+
+export const getBrandByID = async (brand_id: string): Promise<Brands> =>
+    fetch(`${process.env.NEXT_PUBLIC_RESTFULL_API}/brand/detail/${brand_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then((res) => res.json())

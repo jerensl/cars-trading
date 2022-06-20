@@ -7,6 +7,7 @@ import { useMutation, useQuery } from 'react-query'
 import { getAllBrand, searchBrandByName, queryClient } from '../../context/api'
 import { Card } from './card'
 import { ListOfBrands } from './item'
+import clsx from 'clsx'
 
 interface MyFormValues {
     query: string
@@ -78,17 +79,20 @@ export const Brands = (): React.ReactElement => {
                 >
                     {({ errors, touched }) => (
                         <Form>
-                            <div className="w-full bg-transparent border rounded-md focus-within:border-green-500 focus-within:ring focus-within:ring-green-400 focus-within:ring-opacity-40">
-                                <Field
-                                    className="text-gray-700 placeholder-gray-400 bg-transparent border-none appearance-none focus:outline-none focus:placeholder-transparent focus:ring-0 p-2 w-full"
-                                    id="query"
-                                    name="query"
-                                    placeholder="Search Car Brand.."
-                                />
-                            </div>
-                            {errors.query && touched.query ? (
-                                <div>{errors.query}</div>
-                            ) : null}
+                            <Field
+                                className={clsx(
+                                    'text-sm rounded-lg block w-full p-2.5',
+                                    {
+                                        'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500':
+                                            errors.query,
+                                        'bg-green-50 border border-green-500 text-green-900 placeholder-green-700 focus:ring-green-500 focus:border-green-500':
+                                            !errors.query,
+                                    }
+                                )}
+                                id="query"
+                                name="query"
+                                placeholder="Search Car Brand.."
+                            />
                         </Form>
                     )}
                 </Formik>

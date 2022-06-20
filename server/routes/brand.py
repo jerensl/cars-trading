@@ -71,6 +71,12 @@ async def search_car_brand(brand):
         return ResponseModel(brand, "Brand data retrieved successfully")
     return ErrorResponseModel(404, "Brand doesn't exist.")
 
+@router.get("/detail/{id}")
+async def search_car_brand(id):
+    brand = await retrieve_brand(id)
+    if brand:
+        return ResponseModel(brand, "Brand data retrieved successfully")
+    return ErrorResponseModel(404, "Brand doesn't exist.")
 
 @router.put("/{id}")
 async def update_car_brand(id: str, req: UpdateBrandsModel = Body(...)):

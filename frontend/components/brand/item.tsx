@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Image, { ImageLoader } from 'next/image'
 import { Brand } from '../../context/api'
+import { LinkURL } from '../link_url'
 
 const blobStorageIoImageLoader: ImageLoader = ({ src }) => {
     return `http://localhost:8000/brand/${src}`
@@ -78,9 +79,11 @@ const BodyTable = ({
                 </span>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <button className="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline">
-                    Edit
-                </button>
+                <LinkURL href={`/dashboard/${id}`}>
+                    <a className="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline">
+                        Edit
+                    </a>
+                </LinkURL>
             </td>
         </tr>
     )
